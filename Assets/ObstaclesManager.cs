@@ -10,16 +10,11 @@ public class ObstaclesManager : MonoBehaviour
   [SerializeField] SingletonGlobalValues globals;
   private float currSpawnTimer = 0;
   // currenct obstacles in the manager
-  public List<Rigidbody2D> obstacles;
-  private int counter = 0;
+  public List<Transform> obstacles;
   // Start is called before the first frame update
   void Start()
   {
-    obstacles = GetComponentsInChildren<Rigidbody2D>().ToList();
-    foreach (Rigidbody2D t in obstacles)
-    {
-      t.GetComponent<Obstacle>().id = counter++;
-    }
+    obstacles = GetComponentsInChildren<Transform>().ToList();
   }
 
   // Update is called once per frame
@@ -28,7 +23,7 @@ public class ObstaclesManager : MonoBehaviour
     if (globals.GetGameStopped()) return;
     foreach (var obs in obstacles)
     {
-      if (obs == null || !obs.CompareTag("Obstacle")) continue;
+      if (obs == null || (!obs.CompareTag("Obstacle") && !obs.CompareTag("ComboObstacle"))) continue;
       obs.transform.Translate(globals.GetFloorObstacleSpeed() * Time.deltaTime * Vector3.left);
     }
     currSpawnTimer -= Time.deltaTime;
@@ -36,15 +31,20 @@ public class ObstaclesManager : MonoBehaviour
     {
       int randIdx = Random.Range(0, possibleObstacles.Length);
       GameObject newObstacle = Instantiate(possibleObstacles[randIdx], transform);
-      newObstacle.transform.position = transform.position;
-      obstacles.Add(newObstacle.GetComponent<Rigidbody2D>());
+      // newObstacle.transform.position = transform.position;
+      obstacles.Add(newObstacle.GetComponent<Transform>());
       currSpawnTimer = spawnTimer;
     }
   }
 
   public void DestroyObstacle(GameObject obstacle)
   {
-    obstacles.Remove(obstacle.GetComponent<Rigidbody2D>());
+    var parent = obstacle.transform.parent;
+    obstacles.Remove(obstacle.GetComponent<Transform>());
     Destroy(obstacle);
+    if (parent.CompareTag("ComboObstacle") && parent.GetComponentsInChildren<Obstacle>().Length == 1)
+    {
+      Destroy(parent.gameObject);
+    }
   }
 }

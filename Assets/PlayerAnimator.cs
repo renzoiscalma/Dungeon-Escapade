@@ -6,6 +6,7 @@ public class PlayerAnimator : MonoBehaviour
 {
   public Rigidbody2D playerRb2d;
   public Movement pMovement;
+  private GroundChecker groundChecker;
   Animator pAnimator;
   bool running = true;
   bool falling = false;
@@ -16,6 +17,7 @@ public class PlayerAnimator : MonoBehaviour
     playerRb2d = GetComponentInParent<Rigidbody2D>();
     pMovement = GetComponentInParent<Movement>();
     pAnimator = GetComponent<Animator>();
+    groundChecker = transform.parent.GetComponentInChildren<GroundChecker>();
   }
 
   void Update()
@@ -25,6 +27,13 @@ public class PlayerAnimator : MonoBehaviour
       pAnimator.SetTrigger("death");
       return;
     }
+    if (groundChecker.grounded)
+    {
+      running = true;
+      rising = false;
+      falling = false;
+    }
+    else
     if (playerRb2d.velocity.y > 0)
     {
       rising = true;
@@ -37,12 +46,6 @@ public class PlayerAnimator : MonoBehaviour
       rising = false;
       running = false;
       falling = true;
-    }
-    if (pMovement.finishedJumping)
-    {
-      running = true;
-      rising = false;
-      falling = false;
     }
     pAnimator.SetBool("running", running);
     pAnimator.SetBool("falling", falling);
