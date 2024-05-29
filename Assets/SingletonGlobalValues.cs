@@ -11,6 +11,8 @@ public class SingletonGlobalValues : MonoBehaviour
   private static readonly float startingObstacleSpeed = 5f;
   protected float floorObstacleSpeed = startingObstacleSpeed;
   protected float backgroundSpeed = startingBackgroundSpeed;
+  public float score = 0;
+  private readonly float scorePerTime = 10f;
   private bool gameStopped;
   private static readonly float zeroSpeed;
   private static SingletonGlobalValues _Instance;
@@ -36,7 +38,10 @@ public class SingletonGlobalValues : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-
+    if (!gameStopped)
+    {
+      score += scorePerTime * Time.deltaTime;
+    }
   }
 
   public void StopObstacleAndFloor()
@@ -80,5 +85,11 @@ public class SingletonGlobalValues : MonoBehaviour
   public bool GetGameStopped()
   {
     return gameStopped;
+  }
+
+  public void RestartValues()
+  {
+    ResetSpeed();
+    score = 0;
   }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
   [SerializeField] Vector2 jumpForce = new Vector2(0, 10);
+  [SerializeField] UIController uiController;
   [SerializeField] SingletonGlobalValues globals;
   Rigidbody2D rgb2d;
   PlayerAnimator animator;
@@ -12,17 +13,13 @@ public class Movement : MonoBehaviour
   public bool finishedJumping = true;
   public int jumpCount = 0;
   public int maxJumps = 2;
-  static readonly float contactRangeMin = -3.70f;
-  static readonly float contactRangeMax = -3.4f;
   public bool dead = false;
   void Start()
   {
     rgb2d = GetComponent<Rigidbody2D>();
     animator = GetComponentInChildren<PlayerAnimator>();
     groundChecker = GetComponentInChildren<GroundChecker>();
-
   }
-
   // Update is called once per frame
   void Update()
   {
@@ -43,11 +40,14 @@ public class Movement : MonoBehaviour
 
   void OnCollisionStay2D(Collision2D other)
   {
-    if (other.collider.transform.CompareTag("Deadly") || other.collider.gameObject.name.Contains("Spikes"))
+    if (!dead
+      && (other.collider.transform.CompareTag("Deadly")
+      || other.collider.gameObject.name.Contains("Spikes")))
     {
       animator.TriggerDeath();
       dead = true;
       globals.StopObstacleAndFloor();
+      uiController.ShowRestart();
       return;
     }
     if (groundChecker.grounded)
