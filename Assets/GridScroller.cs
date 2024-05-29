@@ -6,14 +6,16 @@ public class GridScroller : MonoBehaviour
 {
   [SerializeField] GameObject[] floorGrids;
   [SerializeField] GameObject[] backgroundGrids;
-  // background speed for parallax effect
-  [SerializeField] float backgroundSpeed = 2f;
-  // floor speed 
-  [SerializeField] float floorSpeed = 5f;
-  // Start is called before the first frame update
+  [SerializeField] Movement player;
+  [SerializeField] SingletonGlobalValues globals;
+  Rigidbody2D[] floorRb2d;
   void Start()
   {
-
+    floorRb2d = new Rigidbody2D[floorGrids.Length];
+    for (int i = 0; i < floorRb2d.Length; i++)
+    {
+      floorRb2d[i] = floorGrids[i].GetComponentInChildren<Rigidbody2D>();
+    }
   }
 
   // Update is called once per frame
@@ -33,7 +35,7 @@ public class GridScroller : MonoBehaviour
       }
       else
       {
-        floorGrids[i].transform.Translate(floorSpeed * Time.deltaTime * Vector3.left);
+        floorGrids[i].transform.Translate(globals.GetFloorObstacleSpeed() * Time.deltaTime * Vector3.left);
       }
     }
   }
@@ -48,7 +50,7 @@ public class GridScroller : MonoBehaviour
       }
       else
       {
-        backgroundGrids[i].transform.Translate(backgroundSpeed * Time.deltaTime * Vector3.left);
+        backgroundGrids[i].transform.Translate(globals.GetBackgroundSpeed() * Time.deltaTime * Vector3.left);
       }
     }
   }

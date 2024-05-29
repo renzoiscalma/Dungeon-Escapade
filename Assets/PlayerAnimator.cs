@@ -10,6 +10,7 @@ public class PlayerAnimator : MonoBehaviour
   bool running = true;
   bool falling = false;
   bool rising = false;
+  bool death = false;
   void Start()
   {
     playerRb2d = GetComponentInParent<Rigidbody2D>();
@@ -19,6 +20,11 @@ public class PlayerAnimator : MonoBehaviour
 
   void Update()
   {
+    if (death)
+    {
+      pAnimator.SetTrigger("death");
+      return;
+    }
     if (playerRb2d.velocity.y > 0)
     {
       rising = true;
@@ -41,5 +47,10 @@ public class PlayerAnimator : MonoBehaviour
     pAnimator.SetBool("running", running);
     pAnimator.SetBool("falling", falling);
     pAnimator.SetBool("rising", rising);
+  }
+
+  public void TriggerDeath()
+  {
+    death = true;
   }
 }

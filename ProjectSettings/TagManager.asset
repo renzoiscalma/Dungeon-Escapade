@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Floor
+  - Obstacle
+  - Deadly
   layers:
   - Default
   - TransparentFX
