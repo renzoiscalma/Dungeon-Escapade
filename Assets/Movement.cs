@@ -10,15 +10,18 @@ public class Movement : MonoBehaviour
   Rigidbody2D rgb2d;
   PlayerAnimator animator;
   GroundChecker groundChecker;
-  public bool finishedJumping = true;
+  DebrisGenerator debrisGenerator;
+  SmokeController smokeController;
   public int jumpCount = 0;
   public int maxJumps = 2;
   public bool dead = false;
   void Start()
   {
     rgb2d = GetComponent<Rigidbody2D>();
+    debrisGenerator = GetComponent<DebrisGenerator>();
     animator = GetComponentInChildren<PlayerAnimator>();
     groundChecker = GetComponentInChildren<GroundChecker>();
+    smokeController = GetComponentInChildren<SmokeController>();
   }
   // Update is called once per frame
   void Update()
@@ -30,9 +33,9 @@ public class Movement : MonoBehaviour
       {
         jumpCount++;
         rgb2d.velocity = jumpForce;
-        if (jumpCount >= maxJumps)
+        if (groundChecker.grounded)
         {
-          finishedJumping = false;
+          smokeController.PlayJumpSmoke(transform);
         }
       }
     }
@@ -48,11 +51,11 @@ public class Movement : MonoBehaviour
       dead = true;
       globals.StopObstacleAndFloor();
       uiController.ShowRestart();
+      debrisGenerator.DispenseDebris(transform);
       return;
     }
     if (groundChecker.grounded)
     {
-      finishedJumping = true;
       jumpCount = 0;
     }
   }

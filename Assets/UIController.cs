@@ -28,10 +28,9 @@ public class UIController : MonoBehaviour
     gameObject.SetActive(false);
   }
 
-  public void ShowRestart(float score = 0f)
+  public void ShowRestart()
   {
-    Debug.Log("Should show here");
-    textScoreComponent.SetText("Your score: " + score);
+    textScoreComponent.SetText("Your score: " + globals.score);
     gameObject.SetActive(true);
   }
 }
