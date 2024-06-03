@@ -13,14 +13,17 @@ public class SmokeLandFX : MonoBehaviour
 
   public void Play()
   {
-    Debug.Log("Play!");
+    if (animator == null)
+    {
+      animator = GetComponent<Animator>();
+    }
     gameObject.SetActive(true);
     animator.SetTrigger("play");
   }
 
   void Hide()
   {
-    Debug.Log("Hide");
     gameObject.SetActive(false);
+    Destroy(gameObject);
   }
 }

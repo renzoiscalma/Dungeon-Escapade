@@ -7,11 +7,13 @@ public class Movement : MonoBehaviour
   [SerializeField] Vector2 jumpForce = new Vector2(0, 10);
   [SerializeField] UIController uiController;
   [SerializeField] SingletonGlobalValues globals;
+  [SerializeField]
+  EffectsController effectsController;
+
   Rigidbody2D rgb2d;
   PlayerAnimator animator;
   GroundChecker groundChecker;
   DebrisGenerator debrisGenerator;
-  SmokeController smokeController;
   public int jumpCount = 0;
   public int maxJumps = 2;
   public bool dead = false;
@@ -21,7 +23,6 @@ public class Movement : MonoBehaviour
     debrisGenerator = GetComponent<DebrisGenerator>();
     animator = GetComponentInChildren<PlayerAnimator>();
     groundChecker = GetComponentInChildren<GroundChecker>();
-    smokeController = GetComponentInChildren<SmokeController>();
   }
   // Update is called once per frame
   void Update()
@@ -35,7 +36,7 @@ public class Movement : MonoBehaviour
         rgb2d.velocity = jumpForce;
         if (groundChecker.grounded)
         {
-          smokeController.PlayJumpSmoke(transform);
+          effectsController.PlayJumpSmoke(transform);
         }
       }
     }

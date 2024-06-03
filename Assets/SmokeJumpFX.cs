@@ -13,11 +13,16 @@ public class SmokeJumpFX : MonoBehaviour
 
   public void Play()
   {
+    if (animator == null)
+    {
+      animator = GetComponent<Animator>();
+    }
     gameObject.SetActive(true);
     animator.SetTrigger("play");
   }
   void Hide()
   {
     gameObject.SetActive(false);
+    Destroy(gameObject);
   }
 }

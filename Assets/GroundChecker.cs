@@ -3,14 +3,7 @@ using UnityEngine;
 public class GroundChecker : MonoBehaviour
 {
   public bool grounded = true;
-
-  SmokeController smokeController;
-
-  void Start()
-  {
-    smokeController = transform.parent.GetComponentInChildren<SmokeController>();
-  }
-
+  [SerializeField] EffectsController effectsController;
   void OnTriggerStay2D(Collider2D col)
   {
     grounded = true;
@@ -25,7 +18,7 @@ public class GroundChecker : MonoBehaviour
   {
     if (!grounded)
     {
-      smokeController.PlayLandSmoke(transform.parent);
+      effectsController.PlayLandSmoke(transform.parent);
     }
   }
 }
